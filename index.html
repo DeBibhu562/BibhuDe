@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Drag and Drop Example</title>
+    <style>
+      .container {
+        display: flex;
+        justify-content: space-between;
+      }
+      .container div {
+        width: 300px;
+        height: 300px;
+        border: 1px solid black;
+        padding: 10px;
+        overflow: auto;
+      }
+      .item {
+        margin: 10px;
+        padding: 5px;
+        background-color: lightblue;
+        cursor: move;
+        max-width: 80%;
+        max-height: 30%;
+      }
+
+      .item:hover {
+        background-color: lightgreen;
+      }
+
+      .success-message {
+        color: green;
+        font-weight: bold;
+      }
+      .reset-button {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Drag and Drop Contener</h1>
+
+    <div class="container">
+      <div id="container1">
+        <h2>Container 1</h2>
+        <img
+          class="item"
+          draggable="true"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8M9VBoRFlFpP55b936pd-6CNMiRifqUDhZIzVO7U9TQ&usqp=CAU&ec=48665699"
+          alt="Icon 1"
+        />
+        <img
+          class="item"
+          draggable="true"
+          src="https://media.istockphoto.com/id/475258104/vector/summer-landscape.jpg?s=612x612&w=0&k=20&c=FDsteAFpUmJk1sls66T4ou6yoNks4AyRd-SYqaNobFE="
+          alt="Icon 2"
+        />
+        <img
+          class="item"
+          draggable="true"
+          src="https://media.istockphoto.com/id/1457708564/vector/abstract-fingerprints-tree-silhouettes-ellipse.jpg?s=612x612&w=0&k=20&c=a1x69ZVJ1iyXuv-uEBhv4eoGsFwE2vjiGG6N2iWKQNQ="
+          alt="Icon 3"
+        />
+        <p class="item" draggable="true">Item 5</p>
+      </div>
+
+      <div id="container2">
+        <h2>Container 2</h2>
+      </div>
+    </div>
+
+    <p class="success-message" id="successMessage"></p>
+
+    <button class="reset-button" onclick="resetContainers()">Reset</button>
+
+    <script>
+      // Step 1: Define necessary variables
+      var draggedItem = null;
+      var successMessage = document.getElementById("successMessage");
+
+      // Step 2: Add event listeners to enable dragging and dropping
+      var items = document.getElementsByClassName("item");
+      for (var i = 0; i < items.length; i++) {
+        items[i].addEventListener("dragstart", dragStart);
+        items[i].addEventListener("dragend", dragEnd);
+      }
+
+      var containers = document.getElementsByClassName("container");
+      for (var i = 0; i < containers.length; i++) {
+        containers[i].addEventListener("dragover", dragOver);
+        containers[i].addEventListener("dragenter", dragEnter);
+        containers[i].addEventListener("dragleave", dragLeave);
+        containers[i].addEventListener("drop", drop);
+      }
+
+      // Step 3: Implement drag and drop functions
+      function dragStart() {
+        draggedItem = this;
+        setTimeout(function () {
+          draggedItem.style.display = "none";
+        }, 0);
+      }
+
+      function dragEnd() {
+        setTimeout(function () {
+          draggedItem.style.display = "block";
+          draggedItem = null;
+        }, 0);
+      }
+
+      function dragOver(e) {
+        e.preventDefault();
+      }
+
+      function dragEnter(e) {
+        e.preventDefault();
+        this.classList.add("highlight");
+      }
+
+      function dragLeave() {
+        this.classList.remove("highlight");
+      }
+
+      function drop() {
+        this.classList.remove("highlight");
+        this.appendChild(draggedItem);
+        showSuccessMessage("Item dropped successfully!");
+      }
+
+      // Step 4: Implement helper functions
+      function showSuccessMessage(message) {
+        successMessage.innerText = message;
+      }
+
+      function resetContainers() {
+        var container1 = document.getElementById("container1");
+        var container2 = document.getElementById("container2");
+        container2.innerHTML = "<h2>Container 2</h2>";
+        successMessage.innerText = "";
+
+        // Restore items in container 1
+        var items = document.getElementsByClassName("item");
+        for (var i = 0; i < items.length; i++) {
+          container1.appendChild(items[i]);
+        }
+      }
+    </script>
+  </body>
+</html>
